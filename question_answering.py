@@ -93,8 +93,8 @@ def main():
     analyzer = Analyser(model, pre_processor.untouched_sentences)
     parsed_questions = analyzer.parse_questions(questions)
     for idx, question in enumerate(questions):
-        print(f"\n\nQuestion-{idx+1}: {question}\n"
-              f"Answer-{idx+1}: {analyzer.answer(question, idx)}\n\n\n")
+        print(f"\n\nQuestion-{idx + 1}: {question}\n"
+              f"Answer-{idx + 1}: {analyzer.answer(question, idx)}\n\n\n")
     ###
     program_time["q-a"]["end"] = time.time()
     #####################################################################################
@@ -108,3 +108,13 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+"""
+ilk_repolar = ilk hesaptaki repo isimleri
+ikinci_repolar = ikinci hesaptaki repo isimleri
+
+Bunları küme gibi düşünürsek
+olmayan repolar = ilk_repolar - ikinci_repolar (farkı)
+
+ilk_repolar ∩ ikinci_repolar 
+"""
