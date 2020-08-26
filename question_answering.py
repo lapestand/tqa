@@ -1,9 +1,10 @@
-import src.Helper
+from src import Helper
 from src.Helper import Properties
 import time
 
 
 def main():
+    # Helper.get_started()
     program_time = {
         "main_program": dict(),
         "input_validation": dict(),
@@ -64,8 +65,8 @@ def main():
     program_time["pre_processing"]["start"] = time.time()
     from src.pre_processing.PreProcessor import PreProcessor
     #####################################################################################
-    pre_processor = PreProcessor(raw_data, file_name, file_type)
-    pre_processor.pre_process()
+    pre_processor = PreProcessor()
+    pre_processor.pre_process(raw_data, file_type, remove_stop_words=True)
 
     # for s, t, sentence in zip(pre_processor.lemmas["str"], pre_processor.lemmas["tuple"], pre_processor.lemmas["sentence"]):
     #     print(f"\n\n\nString = {s}\n\nTuple = {t}\n\nSentence = {sentence}\n")
@@ -78,9 +79,9 @@ def main():
     program_time["modelling"]["start"] = time.time()
     from src.modelling.Model import Model
     #####################################################################################
-    model = Model(pre_processor.lemmas["tuple"])
-    # document_term_matrix = model.document_term_matrix_tfidf()
-    # print(document_term_matrix)
+    model = Model(pre_processor.data["p_data"]["pos"]["tuple"])
+    document_term_matrix = model.document_term_matrix_tfidf()
+    print(document_term_matrix)
     ###
     program_time["modelling"]["end"] = time.time()
     #####################################################################################
@@ -90,7 +91,7 @@ def main():
     program_time["q-a"]["start"] = time.time()
     from src.qanswering.question_analyzer import Analyser
     #####################################################################################
-    analyzer = Analyser(model, pre_processor.untouched_sentences)
+    analyzer = Analyser(model, pre_processor.data["raw_data"]["sentences"])
     parsed_questions = analyzer.parse_questions(questions)
     for idx, question in enumerate(questions):
         print(f"\n\nQuestion-{idx + 1}: {question}\n"

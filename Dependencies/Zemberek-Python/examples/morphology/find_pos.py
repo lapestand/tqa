@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     morphology: TurkishMorphology = TurkishMorphology.createWithDefaults()
 
-    sentence: str = 'Keşke yarın hava güzel olsa'
+    sentence: str = 'Görüşmeyeli nasılsın?'
 
     analysis: java.util.ArrayList = (
         morphology.analyzeAndDisambiguate(sentence).bestAnalysis()

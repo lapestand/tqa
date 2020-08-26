@@ -202,9 +202,127 @@
 # df = df.append(new_row, ignore_index=True)
 #
 # print(df)
+# 
+# 
+# import fasttext.util
+#
+# print("Downloading..")
+# fasttext.util.download_model('tr', if_exists='ignore')  # Turkish
+# ft = fasttext.load_model('cc.tr.300.bin')
+#
+# print(f"Dimension: {ft.get_dimension()}")
+# fasttext.util.reduce_model(ft, 100)
+# print(f"Dimension: {ft.get_dimension()}")
+#
+# test_str = "Merhaba"
+# print(f"Word vector shape of {test_str} -> {ft.get_word_vector(test_str).shape}")
+# print(ft.get_nearest_neighbors(test_str))
 
-a = "aliveli"
+# from multiprocessing import Value
+# from ctypes import c_bool
+# file_a = Value(c_bool, False)
+# file_n = Value(c_bool, False)
+# file_c = Value(c_bool, True)
+#
+# print(file_a)
+# print(file_a.value)
+# file_a.value = True
+# print(file_a)
+# print(file_a.value)
 
-print(list(a))
+import re
+import os
+import time
+import numpy as np
+import nltk
+from nltk.corpus import stopwords
+import multiprocessing
+from bs4 import Comment
+from os.path import join
+from bs4 import BeautifulSoup
+from multiprocessing import Process, Value
+from ctypes import c_bool
+from sklearn.feature_extraction.text import TfidfVectorizer
+from jpype import JClass, getDefaultJVMPath, shutdownJVM, startJVM, JString, java
+from src import Helper
+from src.Helper import Properties
+from src import Helper
+from src.pre_processing.PreProcessor import PreProcessor
+#
+# doc = ["Test yapıyorum. Acaba ne kadar doğru? Emin de değilim, aslında."]
+#
+# pp = PreProcessor()
+# pp.split_into_sentences(doc)
+# print(pp.data["raw_data"]["sentences"])
+# s = [_.lower() for _ in (pp.data["raw_data"]["sentences"])]
+# print([_.lower() for _ in (pp.data["raw_data"]["sentences"])])
+#
+#
+# def word_tokenization(sent):
+#     def run(sentence, i, rt_tokens, rt):
+#         try:
+#             startJVM(
+#                 getDefaultJVMPath(),
+#                 '-ea',
+#                 f'-Djava.class.path={Properties.zemberek_path}',
+#                 convertStrings=False
+#             )
+#
+#             tokens = list()
+#             TurkishTokenizer: JClass = JClass('zemberek.tokenization.TurkishTokenizer')
+#             Token: JClass = JClass('zemberek.tokenization.Token')
+#
+#             tokenizer: TurkishTokenizer = TurkishTokenizer.DEFAULT
+#
+#             inp = sentence
+#
+#             token_iterator = tokenizer.getTokenIterator(JString(inp))
+#             for token in token_iterator:
+#                 tokens.append(
+#                     {
+#                         "token": str(token),
+#                         "content": str(token.content),
+#                         "normalized": str(token.normalized),
+#                         "type": str(token.type),
+#                         "start": str(token.start),
+#                         "end": str(token.end)
+#                     }
+#                 )
+#             if rt_tokens[i] is None:
+#                 rt_tokens[i] = tokens
+#             else:
+#                 print("\n\n\n\n\nAMAZING ERROR\n\n\n\n\n")
+#                 rt[i] = False
+#             shutdownJVM()
+#         except:
+#             rt.value = False
+#             Helper.debug("word_tokenization", False, "module_debug")
+#
+#     manager = multiprocessing.Manager()
+#     tokens = manager.list()
+#     processes = list()
+#     ret_values = manager.list()
+#     ret_values.extend([True] * len(sent))
+#
+#     tokens.extend([None] * len(sent))
+#
+#     for idx, s1 in enumerate(sent):
+#         processes.append(Process(target=run, args=(s1, idx, tokens, ret_values)))
+#
+#     for p in processes:
+#         p.start()
+#     for p in processes:
+#         p.join()
+#
+#     return False in ret_values
+#
+#
+#
+# for _ in word_tokenization(s):
+#     print(_, end="\n\n\n")
 
-print([a])
+import question_answering
+
+while True:
+    question_answering.main()
+print("HI")

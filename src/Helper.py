@@ -5,6 +5,9 @@ from os.path import join
 from urllib.parse import urlparse
 
 
+# import fasttext.util
+
+
 class Properties:
     DEBUG = True
 
@@ -22,7 +25,9 @@ class Properties:
 
     error_file_name = "Errors.txt"
 
-    analyzer_mode = {"euclidian_distance": False, "cosine_similarity": True}
+    analyzer_mode = {"syntactic": True, "semantic": False}
+
+    distance_mode = {"euclidian_distance": False, "cosine_similarity": True}
 
     def error_message(self, line, func):
         return "Error on %s line - function name: %s", line, func
@@ -56,3 +61,8 @@ def debug(module_name, detail, mode):
             print(module_name + detail)
         elif mode == "info":
             print("\t\t" + module_name + ': ' + detail)
+
+# def get_started():
+#     fasttext.util.download_model('tr', if_exists='ignore')
+
+# def mute()

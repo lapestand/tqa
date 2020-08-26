@@ -2,6 +2,7 @@ from src.pre_processing.PreProcessor import PreProcessor
 from src.Helper import Properties
 import numpy as np
 import pandas as pd
+from src.qanswering.analyser import SyntacticAnalyser, SemanticAnalyser
 
 from multiprocessing import Process
 
@@ -30,17 +31,18 @@ class Analyser:
         self.q_tokens = list()
 
     def answer(self, question, q_order):
-        if type(question) == str:
-            question = [question]
-        # self.__parse_question(questions)
+        if Properties.analyzer_mode["syntactic"]:
+            if type(question) == str:
+                question = [question]
+            # self.__parse_question(questions)
 
-        if Properties.analyzer_mode["euclidian_distance"]:
-            return min(self.get_euclidian_distances(self.convert2vector(self.q_tokens[q_order])))
-        else:
-            cosine_similarities = self.get_cosine_similarities(q_order)
-            # print(cosine_similarities)
-            index_max = max(range(len(cosine_similarities)), key=cosine_similarities.__getitem__)
-            return self.real_doc_sentences[index_max]
+            if Properties.distance_mode["euclidian_distance"]:  # NOT WORKING
+                return min(self.get_euclidian_distances(self.convert2vector(self.q_tokens[q_order])))
+            else:
+                cosine_similarities = self.get_cosine_similarities(q_order)
+                # print(cosine_similarities)
+                index_max = max(range(len(cosine_similarities)), key=cosine_similarities.__getitem__)
+                return self.real_doc_sentences[index_max], index_max
 
     # def __parse_question(self, question):
     #     p = PreProcessor(question, "empty", "empty", is_question=True)
@@ -74,4 +76,5 @@ class Analyser:
         query_tfidf = self.model.vectorizer.transform([self.q_tokens[q_order]])
         # df = pd.DataFrame(query_tfidf.todense(), index=range(1),
         #                   columns=self.model.vectorizer.get_feature_names())
+        print(f"Cosine similarity: {cosine_similarity(query_tfidf, self.model.vectors).flatten()}")
         return cosine_similarity(query_tfidf, self.model.vectors).flatten()
