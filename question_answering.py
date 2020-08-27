@@ -109,13 +109,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-"""
-ilk_repolar = ilk hesaptaki repo isimleri
-ikinci_repolar = ikinci hesaptaki repo isimleri
-
-Bunları küme gibi düşünürsek
-olmayan repolar = ilk_repolar - ikinci_repolar (farkı)
-
-ilk_repolar ∩ ikinci_repolar 
-"""
