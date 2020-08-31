@@ -27,7 +27,8 @@ def main():
     #         Properties.supported_file_types) + " : ").lower()
     # file_address = "data/test.txt"
     # question = input("Enter question")
-    questions = ["Nerede büyüdün?", "Neyle mücadele ettin?", "Baban nasıl biriydi?",
+    questions = ["Razgatlığoğlu ilk etaptan kaç galibet kazandı?", "Nerede büyüdün?", "Neyle mücadele ettin?",
+                 "Baban nasıl biriydi?",
                  "Hiç psikolojik bir rahatsızlık geçirdin mi?"]
     file_type = "txt"
     on_web = False
@@ -66,7 +67,8 @@ def main():
     from src.pre_processing.PreProcessor import PreProcessor
     #####################################################################################
     pre_processor = PreProcessor()
-    pre_processor.pre_process(raw_data, file_type, remove_stop_words=True)
+    pre_processor.pre_process(raw_data, file_type)
+    # pre_processor.pre_process(raw_data, file_type, remove_stop_words=True)
 
     # for s, t, sentence in zip(pre_processor.lemmas["str"], pre_processor.lemmas["tuple"], pre_processor.lemmas["sentence"]):
     #     print(f"\n\n\nString = {s}\n\nTuple = {t}\n\nSentence = {sentence}\n")
@@ -81,7 +83,8 @@ def main():
     #####################################################################################
     model = Model(pre_processor.data["p_data"]["pos"]["tuple"])
     document_term_matrix = model.document_term_matrix_tfidf()
-    print(document_term_matrix)
+    if Properties.DEBUG:
+        print(document_term_matrix)
     ###
     program_time["modelling"]["end"] = time.time()
     #####################################################################################
@@ -91,11 +94,14 @@ def main():
     program_time["q-a"]["start"] = time.time()
     from src.qanswering.question_analyzer import Analyser
     #####################################################################################
-    analyzer = Analyser(model, pre_processor.data["raw_data"]["sentences"])
-    parsed_questions = analyzer.parse_questions(questions)
+    analyzer = Analyser(model, pre_processor.data["raw_data"]["sentences"],
+                        pre_processor.data["p_data"]["pos"]["tuple"])
+    # print(analyzer.matrix_columns, end="\n\n\n")
     for idx, question in enumerate(questions):
         print(f"\n\nQuestion-{idx + 1}: {question}\n"
               f"Answer-{idx + 1}: {analyzer.answer(question, idx)}\n\n\n")
+        break
+
     ###
     program_time["q-a"]["end"] = time.time()
     #####################################################################################

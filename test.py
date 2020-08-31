@@ -320,9 +320,189 @@ from src.pre_processing.PreProcessor import PreProcessor
 #
 # for _ in word_tokenization(s):
 #     print(_, end="\n\n\n")
+#
+# import question_answering
+#
+# while True:
+#     question_answering.main()
+# print("HI")
 
-import question_answering
-
-while True:
-    question_answering.main()
-print("HI")
+# print(__doc__)
+#
+#
+# # Code source: Gaël Varoquaux
+# #              Andreas Müller
+# # Modified for documentation by Jaques Grobler
+# # License: BSD 3 clause
+#
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from matplotlib.colors import ListedColormap
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler
+# from sklearn.datasets import make_moons, make_circles, make_classification
+# from sklearn.neural_network import MLPClassifier
+# from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.svm import SVC
+# from sklearn.gaussian_process import GaussianProcessClassifier
+# from sklearn.gaussian_process.kernels import RBF
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+# from sklearn.naive_bayes import GaussianNB
+# from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+#
+# h = .02  # step size in the mesh
+#
+# names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Gaussian Process",
+#          "Decision Tree", "Random Forest", "Neural Net", "AdaBoost",
+#          "Naive Bayes", "QDA"]
+#
+# classifiers = [
+#     KNeighborsClassifier(3),
+#     SVC(kernel="linear", C=0.025),
+#     SVC(gamma=2, C=1),
+#     GaussianProcessClassifier(1.0 * RBF(1.0)),
+#     DecisionTreeClassifier(max_depth=5),
+#     RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
+#     MLPClassifier(alpha=1, max_iter=1000),
+#     AdaBoostClassifier(),
+#     GaussianNB(),
+#     QuadraticDiscriminantAnalysis()]
+#
+# X, y = make_classification(n_features=2, n_redundant=0, n_informative=2,
+#                            random_state=1, n_clusters_per_class=1)
+# rng = np.random.RandomState(2)
+# X += 2 * rng.uniform(size=X.shape)
+# linearly_separable = (X, y)
+#
+# datasets = [make_moons(noise=0.3, random_state=0),
+#             make_circles(noise=0.2, factor=0.5, random_state=1),
+#             linearly_separable
+#             ]
+#
+# figure = plt.figure(figsize=(27, 9))
+# i = 1
+# # iterate over datasets
+# for ds_cnt, ds in enumerate(datasets):
+#     # preprocess dataset, split into training and test part
+#     X, y = ds
+#     X = StandardScaler().fit_transform(X)
+#     X_train, X_test, y_train, y_test = \
+#         train_test_split(X, y, test_size=.4, random_state=42)
+#
+#     x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
+#     y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
+#     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+#                          np.arange(y_min, y_max, h))
+#
+#     # just plot the dataset first
+#     cm = plt.cm.RdBu
+#     cm_bright = ListedColormap(['#FF0000', '#0000FF'])
+#     ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+#     if ds_cnt == 0:
+#         ax.set_title("Input data")
+#     # Plot the training points
+#     ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright,
+#                edgecolors='k')
+#     # Plot the testing points
+#     ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6,
+#                edgecolors='k')
+#     ax.set_xlim(xx.min(), xx.max())
+#     ax.set_ylim(yy.min(), yy.max())
+#     ax.set_xticks(())
+#     ax.set_yticks(())
+#     i += 1
+#
+#     # iterate over classifiers
+#     for name, clf in zip(names, classifiers):
+#         ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+#         clf.fit(X_train, y_train)
+#         score = clf.score(X_test, y_test)
+#
+#         # Plot the decision boundary. For that, we will assign a color to each
+#         # point in the mesh [x_min, x_max]x[y_min, y_max].
+#         if hasattr(clf, "decision_function"):
+#             Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
+#         else:
+#             Z = clf.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
+#
+#         # Put the result into a color plot
+#         Z = Z.reshape(xx.shape)
+#         ax.contourf(xx, yy, Z, cmap=cm, alpha=.8)
+#
+#         # Plot the training points
+#         ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright,
+#                    edgecolors='k')
+#         # Plot the testing points
+#         ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright,
+#                    edgecolors='k', alpha=0.6)
+#
+#         ax.set_xlim(xx.min(), xx.max())
+#         ax.set_ylim(yy.min(), yy.max())
+#         ax.set_xticks(())
+#         ax.set_yticks(())
+#         if ds_cnt == 0:
+#             ax.set_title(name)
+#         ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
+#                 size=15, horizontalalignment='right')
+#         i += 1
+#
+# plt.tight_layout()
+# plt.show()
+#
+# # !/usr/bin/env python
+# import socket
+# import subprocess
+# import sys
+# from datetime import datetime
+#
+# # Clear the screen
+# subprocess.call('clear', shell=True)
+#
+# # Ask for input
+# remoteServer = input("Enter a remote host to scan: ")
+# remoteServerIP = socket.gethostbyname(remoteServer)
+#
+# # Print a nice banner with information on which host we are about to scan
+# print("-" * 60)
+# print("Please wait, scanning remote host", remoteServerIP)
+# print("-" * 60)
+#
+# # Check what time the scan started
+# t1 = datetime.now()
+#
+# # Using the range function to specify ports (here it will scans all ports between 1 and 1024)
+#
+# # We also put in some error handling for catching errors
+#
+# try:
+#     for port in range(1, 1025):
+#         print(f"port: {port}", end="\n\n")
+#         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         result = sock.connect_ex((remoteServerIP, port))
+#         if result == 0:
+#             print("Port {}: 	 Open".format(port))
+#         else:
+#             print(f"Port {range} Close. Result: {result}")
+#         sock.close()
+#
+# except KeyboardInterrupt:
+#     print("You pressed Ctrl+C")
+#     sys.exit()
+#
+# except socket.gaierror:
+#     print('Hostname could not be resolved. Exiting')
+#     sys.exit()
+#
+# except socket.error:
+#     print("Couldn't connect to server")
+#     sys.exit()
+#
+# # Checking the time again
+# t2 = datetime.now()
+#
+# # Calculates the difference of time, to see how long it took to run the script
+# total = t2 - t1
+#
+# # Printing the information to screen
+# print('Scanning Completed in: ', total)

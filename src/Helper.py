@@ -25,9 +25,13 @@ class Properties:
 
     error_file_name = "Errors.txt"
 
-    analyzer_mode = {"syntactic": True, "semantic": False}
+    analyzer_mode = {"Syntactic": False, "RuleBased_hybrid": True, "ANN": False}
 
     distance_mode = {"euclidian_distance": False, "cosine_similarity": True}
+
+    questionPOS = {
+        "Num": [('kaç', 'Adj'), ('kaç', 'Verb'), ('kaçta', 'Adv'), ('kaçıncı', 'Adj'), ('kadar', 'Postp'), ],
+    }
 
     def error_message(self, line, func):
         return "Error on %s line - function name: %s", line, func
@@ -66,3 +70,29 @@ def debug(module_name, detail, mode):
 #     fasttext.util.download_model('tr', if_exists='ignore')
 
 # def mute()
+
+"""
+Baltimore’da büyüdüm. Çocukluğumdan beri şahsen travma ve zihinsel sağlık sorunlarıyla mücadele ettim. Tepki vermek, en büyük savunma mekanizmalarımdan biri oldu. Babam, hayatımın çoğunluğunu hapishaneye girip çıkarak geçiren bir eroin bağımlısıydı, annemi beni yalnız başına büyütmek zorunda bıraktı.
+
+Çocukların görmemesi gereken şeyleri gördüm; yetişkinlerin yaşamadığı deneyimleri yaşadım. 14 yaşımdayken akut anksiyete ve orta şiddette depresyona yakalanmıştım. Daha sonra 26 yaşında Jeneralize Anksiyete ve Panik Bozukluğu ve orta-ağır majör depresif bozukluk tanısı kondu.
+
+Teşhisimden hemen sonra, doktorum tarafından hastalığımın şiddetli olduğu ve ilaç tedavisinin tek etkili seçenek olduğu söylendi ve ilaçlar başlandı.
+
+Açıklama projenin ortaklarından Rus enerji devi Gazprom dan geldi. Yıllık 63 milyar metreküp enerji.
+
+ilk günündeki 20 yarış heyecanlıydı, 109 puan toplayan Türkiye, 12 ülke arasında 9. oldu ve yarış tamamlandı.
+
+Cortananın yeni işletim sistemi Windows 10 un önemli bir parçası olduğunu belirten Microsoft ; Google Android ve iOS cihazlarındaki Dijital.
+
+Teknoloji devi Google, Android in MMM sürümüyle birlikte bir çok sistemsel hatasının düzeltileceğini.
+
+Siroz hastalığı ile ilgili detaylara dikkat çekerek, sağlıklı bir karaciğere sahip olmak hastalık için.
+
+Hastalık çoğu kez yıllarca doğru tanı konmaması veya ciddiye alınmaması sebebi ile kısırlaştırıcı etki yapabiliyor, kronik ağrı.
+
+Ahmet Razgatlıoğlu bir sporcuydu.
+
+ilk 4 etaptan galibiyetle ayrılan 18 yaşındaki Razgatlıoğlu, Almanya daki yarışta 3. sırayı alarak.
+
+Helal gıda pazarı sanki 860 milyar doların üzerinde.
+"""

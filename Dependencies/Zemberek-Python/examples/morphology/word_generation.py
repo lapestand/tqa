@@ -32,10 +32,10 @@ if __name__ == '__main__':
     TurkishMorphology: JClass = JClass('zemberek.morphology.TurkishMorphology')
 
     morphology: TurkishMorphology = (
-        TurkishMorphology.builder().setLexicon('armut').disableCache().build()
+        TurkishMorphology.builder().setLexicon('nasıl').disableCache().build()
     )
 
-    item = morphology.getLexicon().getMatchingItems('armut').get(0)
+    item = morphology.getLexicon().getMatchingItems('nasıl').get(0)
 
     for number_m in number:
         for possessive_m in possessives:

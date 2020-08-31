@@ -12,6 +12,8 @@ from multiprocessing import Process, Value
 from ctypes import c_bool
 from sklearn.feature_extraction.text import TfidfVectorizer
 from jpype import JClass, getDefaultJVMPath, shutdownJVM, startJVM, JString, java
+import sys
+
 from src import Helper
 from src.Helper import Properties
 from src import Helper
@@ -98,12 +100,9 @@ class PreProcessor:
         Helper.debug("lower_case", True, "module_debug")
 
         if self.word_tokenization(self.data["p_data"]["lowercase_sentences"]):  # TOKENIZATION
-            Helper.debug("pre tokenize", True, "module_debug")
+            Helper.debug("word tokenize", True, "module_debug")
         else:
-            Helper.debug("pre tokenize", False, "module_debug")
-
-        for _ in self.data["p_data"]["tokens"]:
-            print(_)
+            Helper.debug("word tokenize", False, "module_debug")
 
         self.remove_punctuation(self.data["p_data"]["tokens"],
                                 self.data["p_data"]["lowercase_sentences"])  # REMOVE PUNCTUATION
@@ -122,11 +121,10 @@ class PreProcessor:
         else:
             Helper.debug("lemmatization", False, "module_debug")
 
-        # exit(1)
-
     def lemmatization(self, sentences):
         def run(ss, rt_lemmas, rt):
             try:
+                # sys.stdout = open(os.devnull)
                 startJVM(
                     getDefaultJVMPath(),
                     '-ea',
@@ -140,9 +138,9 @@ class PreProcessor:
 
                 s = time.time()
                 morphology: TurkishMorphology = TurkishMorphology.createWithDefaults()
+                print(f"\nInitializing time {time.time() - s}")
                 print("*" * 50, end="\n")
 
-                print(f"Initializing time {time.time() - s}")
                 for idx, sentence in enumerate(ss):
                     analysis: java.util.ArrayList = morphology.analyzeSentence(sentence)
                     results: java.util.ArrayList = (
@@ -159,10 +157,8 @@ class PreProcessor:
                         rt_lemmas[idx] = lemmas_
                     else:
                         rt.value = False
-                Helper.debug("lemmatization", True, "module_debug")
                 shutdownJVM()
             except:
-                Helper.debug("lemmatization", False, "module_debug")
                 rt.value = False
 
         def extract_token_and_pos(lemmas_):
@@ -237,10 +233,8 @@ class PreProcessor:
     def split_into_paragraphs(self, doc: str):
         try:
             self.data["raw_data"]["paragraphs"] = list(filter(lambda x: x != '', doc.split('\n\n')))
-            # Helper.debug("split_into_paragraphs", True, "module_debug")
             return True
         except:
-            # Helper.debug("split_into_paragraphs", False, "module_debug")
             return False
 
     def split_into_sentences(self, paragraphs):
@@ -262,10 +256,8 @@ class PreProcessor:
                     for s in extractor.fromParagraph(_):
                         ss.append(str(s))
                 shutdownJVM()
-                # Helper.debug("sentence_boundary_detection", True, "module_debug")
                 r.value = True
             except:
-                # Helper.debug("sentence_boundary_detection", False, "module_debug")
                 r.value = False
 
         manager = multiprocessing.Manager()
@@ -310,12 +302,10 @@ class PreProcessor:
                 if rt_tokens[i] is None:
                     rt_tokens[i] = new_tokens
                 else:
-                    print("\n\n\n\n\nAMAZING ERROR\n\n\n\n\n")
                     rt[i] = False
                 shutdownJVM()
             except:
-                rt.value = False
-                Helper.debug("word_tokenization", False, "module_debug")
+                rt[i] = False
 
         try:
             processes = list()
@@ -335,7 +325,7 @@ class PreProcessor:
                 p.join()
 
             self.data["p_data"]["tokens"] = tokens
-            return False in ret_values
+            return False not in ret_values
         except:
             return False
 

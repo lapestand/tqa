@@ -69,6 +69,8 @@ if __name__ == '__main__':
 
     sentence: str = 'Beşiktaş berabere kaldı.'
 
+    print(f"Sentence: {sentence}\n")
+
     processed: str = ' '.join([
         str(token)
         for token in TurkishTokenizer.DEFAULT.tokenizeToStrings(sentence)

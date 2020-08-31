@@ -2,6 +2,7 @@ from src.pre_processing.PreProcessor import PreProcessor
 from src.Helper import Properties
 import numpy as np
 import pandas as pd
+
 from src.qanswering.analyser import SyntacticAnalyser, SemanticAnalyser
 
 from multiprocessing import Process
@@ -11,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class Analyser:
-    def __init__(self, model, sentences):
+    def __init__(self, model, sentences, sentence_pos):
         # print(f"\n\nProcessing data: \n\t{p.processing_data}"
         #       f"\n\nParagraphs: \n\t{p.paragraphs}"
         #       f"\n\nSentences: \n\t{p.sentences}"
@@ -23,58 +24,22 @@ class Analyser:
         self.model = model
         self.document_term_matrix = self.model.document_term_matrix_tfidf()
         self.matrix_columns = self.document_term_matrix.columns.to_numpy().tolist()
-
+        self.sentence_pos = sentence_pos
         self.real_doc_sentences = sentences
 
-        self.preprocessor_for_question = PreProcessor
-        self.tokens = list()
         self.q_tokens = list()
 
-    def answer(self, question, q_order):
-        if Properties.analyzer_mode["syntactic"]:
-            if type(question) == str:
-                question = [question]
-            # self.__parse_question(questions)
+        if Properties.analyzer_mode["Syntactic"]:
+            self.analyzer = SyntacticAnalyser.SyntacticAnalyzer(self.model, self.real_doc_sentences)
+        elif Properties.analyzer_mode["RuleBased_hybrid"]:
+            self.analyzer = SemanticAnalyser.RuleBasedHybridAnalyzer(self.model, self.real_doc_sentences,
+                                                                     self.sentence_pos)
+        elif Properties.analyzer_mode["ANN"]:
+            self.analyzer = SemanticAnalyser.AnnAnalyzer(self.model, self.real_doc_sentences)
+        else:
+            raise KeyError(
+                "No answer method selected!"
+            )
 
-            if Properties.distance_mode["euclidian_distance"]:  # NOT WORKING
-                return min(self.get_euclidian_distances(self.convert2vector(self.q_tokens[q_order])))
-            else:
-                cosine_similarities = self.get_cosine_similarities(q_order)
-                # print(cosine_similarities)
-                index_max = max(range(len(cosine_similarities)), key=cosine_similarities.__getitem__)
-                return self.real_doc_sentences[index_max], index_max
-
-    # def __parse_question(self, question):
-    #     p = PreProcessor(question, "empty", "empty", is_question=True)
-    #     p.pre_process()
-    #     self.preprocessor_for_question = p
-    #     self.q_tokens.append(p.lemmas["tuple"][0])
-
-    def parse_questions(self, questions):
-        if type(questions) == str:
-            questions = [questions]
-        p = PreProcessor(" ".join(questions), "empty", "empty", is_question=True)
-        p.pre_process()
-        self.preprocessor_for_question = p
-        self.q_tokens = p.lemmas["tuple"]
-
-    def get_euclidian_distances(self, relevant_tokens):
-        return [self.euclidian_distance(relevant_tokens, self.document_term_matrix[idx]) for idx in
-                range(len(self.document_term_matrix))]
-
-    def euclidian_distance(self, v1, v2):
-        pass
-
-    def convert2vector(self, tokens):
-        t = dict.fromkeys(self.matrix_columns)
-        for token in tokens:
-            if token in t:
-                t[token] += 1
-        return pd.DataFrame([t.values()], columns=self.matrix_columns)
-
-    def get_cosine_similarities(self, q_order):
-        query_tfidf = self.model.vectorizer.transform([self.q_tokens[q_order]])
-        # df = pd.DataFrame(query_tfidf.todense(), index=range(1),
-        #                   columns=self.model.vectorizer.get_feature_names())
-        print(f"Cosine similarity: {cosine_similarity(query_tfidf, self.model.vectors).flatten()}")
-        return cosine_similarity(query_tfidf, self.model.vectors).flatten()
+    def answer(self, question):
+        return self.analyzer.answer(question)
