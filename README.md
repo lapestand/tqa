@@ -13,7 +13,8 @@ Desired Output
 
 Steps
 
-1) Input Validation (In progress)
-2) Pre-Processing
+1) Input Validation
+2) Pre-Processing for relevant answering method
 3) Modelling
+4) Answering
 
