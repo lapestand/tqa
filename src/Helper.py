@@ -25,9 +25,11 @@ class Properties:
 
     error_file_name = "Errors.txt"
 
-    analyzer_mode = {"Syntactic": False, "RuleBased_hybrid": True, "ANN": False}
+    analyzer_mode = {"Syntactic": True, "RuleBased_hybrid": False, "ANN": False}
 
-    distance_mode = {"euclidian_distance": False, "cosine_similarity": True}
+    mode = {"TfIdf+PoS": False}
+
+    distance_mode = {"euclidian_distance": True, "cosine_similarity": False}
 
     questionPOS = {
         "Num": [('kaç', 'Adj'), ('kaç', 'Verb'), ('kaçta', 'Adv'), ('kaçıncı', 'Adj'), ('kadar', 'Postp'), ],
@@ -65,6 +67,7 @@ def debug(module_name, detail, mode):
             print(module_name + detail)
         elif mode == "info":
             print("\t\t" + module_name + ': ' + detail)
+
 
 # def get_started():
 #     fasttext.util.download_model('tr', if_exists='ignore')

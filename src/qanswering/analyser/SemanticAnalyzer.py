@@ -1,9 +1,13 @@
 from src.Helper import Properties
-from src.qanswering.analyser.SyntacticAnalyser import SyntacticAnalyzer
+from src.qanswering.analyser.SyntacticAnalyzer import SyntacticAnalyzer
 from src.modelling.Model import Model
+from src.pre_processing.PreProcessor import PreProcessor
 
+import os
+import json
 import pandas as pd
 import numpy as np
+from os.path import join
 
 
 class RuleBasedHybridAnalyzer:
@@ -43,6 +47,7 @@ class RuleBasedHybridAnalyzer:
         If any element of Properties.questionPOS["Num"] in q_tokens find indices of relevant sentences
         Note: bigger loop inside {speed optimization}  
         """
+
         rows, cols = model.document_term_matrix_tfidf().shape
         relevant_rows = list(range(rows))
         if any(adj in max(Properties.questionPOS["Num"], q_tokens[0], key=len) for adj in
@@ -71,3 +76,45 @@ class AnnAnalyzer:
 
     def answer(self, questions, q_order):
         pass
+
+
+class SwoExtractor:
+    def __init__(self):
+        self.default_db_path: str = join('Dependencies', 'turkish-nlp-qa-dataset-master', 'combined.json')
+        self.questions = list()
+
+    def load_questions(self, db=None):
+        if db is None:
+            if self.default_db_path is None:
+                raise FileNotFoundError("Empty default db!")
+            db = self.default_db_path
+        try:
+            with open(db, 'r') as f:
+                distros_dic = json.load(f)
+            for distro in distros_dic["data"]:
+                for p in distro["paragraphs"]:
+                    for q in p["qas"]:
+                        self.questions.append(str(q["question"]))
+            return True
+        except Exception as e:
+            raise e
+
+    def tokenize_questions(self, part_size=10):
+        import pprint
+        import time
+        p = PreProcessor()
+        question_join = str()
+
+        for _ in range(0, len(self.questions), part_size):
+            relevant_part = self.questions[_:_ + part_size]
+            pprint.pprint(relevant_part)
+            p.word_tokenization(relevant_part)
+            print("\n")
+            for __ in p.data["p_data"]["tokens"]:
+                print(__)
+            break
+            print("\nWAITING\n\n")
+            time.sleep(2)
+        # p.word_tokenization(self.questions)
+        # for _ in p.data["p_data"]["tokens"]:
+        #     print(_)

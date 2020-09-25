@@ -3,7 +3,7 @@ from src.Helper import Properties
 import numpy as np
 import pandas as pd
 
-from src.qanswering.analyser import SyntacticAnalyser, SemanticAnalyser
+from src.qanswering.analyser import SyntacticAnalyzer, SemanticAnalyzer
 
 from multiprocessing import Process
 
@@ -30,12 +30,12 @@ class Analyser:
         self.q_tokens = list()
 
         if Properties.analyzer_mode["Syntactic"]:
-            self.analyzer = SyntacticAnalyser.SyntacticAnalyzer(self.model, self.real_doc_sentences)
+            self.analyzer = SyntacticAnalyzer.SyntacticAnalyzer(self.model, self.real_doc_sentences)
         elif Properties.analyzer_mode["RuleBased_hybrid"]:
-            self.analyzer = SemanticAnalyser.RuleBasedHybridAnalyzer(self.model, self.real_doc_sentences,
+            self.analyzer = SemanticAnalyzer.RuleBasedHybridAnalyzer(self.model, self.real_doc_sentences,
                                                                      self.sentence_pos)
         elif Properties.analyzer_mode["ANN"]:
-            self.analyzer = SemanticAnalyser.AnnAnalyzer(self.model, self.real_doc_sentences)
+            self.analyzer = SemanticAnalyzer.AnnAnalyzer(self.model, self.real_doc_sentences)
         else:
             raise KeyError(
                 "No answer method selected!"

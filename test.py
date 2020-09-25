@@ -506,3 +506,31 @@ from src.pre_processing.PreProcessor import PreProcessor
 #
 # # Printing the information to screen
 # print('Scanning Completed in: ', total)
+from os import system
+
+system("clear")
+
+# import json
+#
+# file_loc = 'Dependencies/turkish-nlp-qa-dataset-master/combined.json'
+# question_count, markless = 0, 0
+# with open(file_loc, 'r') as f:
+#     distros_dic = json.load(f)
+# for distro in distros_dic["data"]:
+#     for p in distro["paragraphs"]:
+#         for q in p["qas"]:
+#             question_count += 1
+#             if "?" not in q["question"]:
+#                 markless += 1
+#                 print(q["question"])
+# print(f"\n\nQuestion count: {question_count}")
+# print(f"\n\nMarkless count: {markless}")
+
+from src.qanswering.analyser.SemanticAnalyzer import SwoExtractor
+
+swo = SwoExtractor()
+
+if swo.load_questions():
+    print(len(swo.questions))
+    swo.tokenize_questions(part_size=20)
+#     swo.tokenize_questions(p_mode=True)

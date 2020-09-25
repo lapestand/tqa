@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Turkish Question Answering System - Izzet Yilmaz</title>
+    <style>
+        #local, #web {
+            display: none;
+        }
+
+        body {
+            background-color: #b3b8b3;
+            color: #210d0d;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 70%; margin-left: 10%; background-color: white; ">
+    <form id="questionForm">
+        <fieldset>
+            <legend> Turkish Question Answering System</legend>
+            <fieldset style="float: left">
+                <legend> Document</legend>
+                <label> Type: </label>
+                <input type="radio" name="document_type" id="txt"><label for="txt">text</label>
+                <input type="radio" name="document_type" id="html"><label for="html">html</label>
+                <input type="radio" name="document_type" id="pdf"><label for="pdf">pdf</label>
+                <br>
+                <label>Document: </label>
+                <input type="radio" name="location" id="web_"><label for="web_">WEB</label>
+                <input type="radio" name="location" id="local_"><label for="local_">LOCAL</label>
+                <div id="web">
+                    <br>
+                    <label for="url">Enter an URL:</label>
+                    <input type="url" name="url" id="url" placeholder="https://example.com" size="30" required>
+
+                </div>
+                <div id="local">
+                    <br>
+                    <input type="file" name="doc" id="doc">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend> Approaches</legend>
+                <input type="radio" name="approach" id="tier1"> <label for="tier1"> BoW + Tokenization </label>
+                <input type="radio" name="approach" id="tier2"> <label for="tier2"> Word Embedding </label>
+            </fieldset>
+            <input type="text" name="question" id="question" style="float: right"><label for="question" style="float: right">Question: </label>
+        </fieldset>
+        <input type="submit" value="find_answer" style="float: right">
+    </form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[name$="location"]').click(function () {
+            var value = $(this).attr('id');
+            value = value.substr(0, value.length - 1)
+            $("#local").hide();
+            $("#web").hide();
+            $("#" + value).show();
+        });
+
+        const form = document.getElementById("questionForm");
+        form.addEventListener("submit", e => {
+            console.log(form.element["document_type"].value);
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>
