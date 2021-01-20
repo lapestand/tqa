@@ -526,11 +526,11 @@ system("clear")
 # print(f"\n\nQuestion count: {question_count}")
 # print(f"\n\nMarkless count: {markless}")
 
-from src.qanswering.analyser.SemanticAnalyzer import SwoExtractor
-
-swo = SwoExtractor()
-
-if swo.load_questions():
-    print(len(swo.questions))
-    swo.tokenize_questions(part_size=20)
-#     swo.tokenize_questions(p_mode=True)
+# from src.qanswering.analyser.SemanticAnalyzer import SwoExtractor
+#
+# swo = SwoExtractor()
+#
+# if swo.load_questions():
+#     print(len(swo.questions))
+#     swo.tokenize_questions(part_size=20)
+# #     swo.tokenize_questions(p_mode=True)
